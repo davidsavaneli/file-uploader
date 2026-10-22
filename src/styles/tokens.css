@@ -1,0 +1,138 @@
+/*
+  Design tokens for sava-file-uploader.
+
+  Every color, radius, spacing and motion value the components use is a `--sfu-*` custom property, so a
+  consumer re-themes without touching the library:
+
+    :root { --sfu-color-accent: #7c3aed; }            // app-wide
+    .checkout .sfu { --sfu-radius-lg: 4px; }          // scoped to one uploader
+
+  Dark mode: set `data-sfu-theme="dark"` on <html> (or any ancestor) to force it, `data-sfu-theme="light"`
+  to opt out, or set nothing and the OS preference (`prefers-color-scheme`) decides.
+*/
+
+:root {
+  /* color — base */
+  --sfu-color-accent: #2563eb;
+  --sfu-color-accent-hover: #1d4ed8;
+  --sfu-color-accent-contrast: #ffffff;
+  --sfu-color-accent-soft: rgba(37, 99, 235, 0.08);
+  --sfu-color-accent-ring: rgba(37, 99, 235, 0.35);
+
+  --sfu-color-text: #111827;
+  --sfu-color-text-muted: #6b7280;
+  --sfu-color-text-subtle: #9ca3af;
+
+  --sfu-color-background: #ffffff;
+  --sfu-color-surface: #f9fafb;
+  --sfu-color-surface-hover: #f3f4f6;
+
+  --sfu-color-border: #e5e7eb;
+  --sfu-color-border-strong: #d1d5db;
+
+  /* color — status */
+  --sfu-color-success: #16a34a;
+  --sfu-color-success-soft: rgba(22, 163, 74, 0.1);
+  --sfu-color-warning: #d97706;
+  --sfu-color-warning-soft: rgba(217, 119, 6, 0.1);
+  --sfu-color-error: #dc2626;
+  --sfu-color-error-soft: rgba(220, 38, 38, 0.08);
+
+  /* shape */
+  --sfu-radius-sm: 6px;
+  --sfu-radius-md: 10px;
+  --sfu-radius-lg: 14px;
+  --sfu-radius-full: 9999px;
+
+  /* spacing scale */
+  --sfu-space-1: 4px;
+  --sfu-space-2: 8px;
+  --sfu-space-3: 12px;
+  --sfu-space-4: 16px;
+  --sfu-space-5: 20px;
+  --sfu-space-6: 24px;
+  --sfu-space-8: 32px;
+
+  /* typography — inherits the host font by default */
+  --sfu-font-family: inherit;
+  --sfu-font-size-xs: 11px;
+  --sfu-font-size-sm: 12px;
+  --sfu-font-size-md: 14px;
+  --sfu-font-size-lg: 16px;
+  --sfu-line-height: 1.5;
+
+  /* elevation */
+  --sfu-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --sfu-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --sfu-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.14);
+
+  /* motion */
+  --sfu-duration-fast: 120ms;
+  --sfu-duration: 200ms;
+  --sfu-duration-slow: 320ms;
+  --sfu-ease: cubic-bezier(0.2, 0, 0, 1);
+  --sfu-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* dark values, shared by the forced and the OS-preferred dark theme */
+[data-sfu-theme='dark'] {
+  --sfu-color-accent: #60a5fa;
+  --sfu-color-accent-hover: #93c5fd;
+  --sfu-color-accent-contrast: #0b1220;
+  --sfu-color-accent-soft: rgba(96, 165, 250, 0.12);
+  --sfu-color-accent-ring: rgba(96, 165, 250, 0.4);
+
+  --sfu-color-text: #f3f4f6;
+  --sfu-color-text-muted: #9ca3af;
+  --sfu-color-text-subtle: #6b7280;
+
+  --sfu-color-background: #0f1115;
+  --sfu-color-surface: #161920;
+  --sfu-color-surface-hover: #1c2029;
+
+  --sfu-color-border: #262b36;
+  --sfu-color-border-strong: #343a47;
+
+  --sfu-color-success: #4ade80;
+  --sfu-color-success-soft: rgba(74, 222, 128, 0.12);
+  --sfu-color-warning: #fbbf24;
+  --sfu-color-warning-soft: rgba(251, 191, 36, 0.12);
+  --sfu-color-error: #f87171;
+  --sfu-color-error-soft: rgba(248, 113, 113, 0.12);
+
+  --sfu-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sfu-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --sfu-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-sfu-theme='light']) {
+    --sfu-color-accent: #60a5fa;
+    --sfu-color-accent-hover: #93c5fd;
+    --sfu-color-accent-contrast: #0b1220;
+    --sfu-color-accent-soft: rgba(96, 165, 250, 0.12);
+    --sfu-color-accent-ring: rgba(96, 165, 250, 0.4);
+
+    --sfu-color-text: #f3f4f6;
+    --sfu-color-text-muted: #9ca3af;
+    --sfu-color-text-subtle: #6b7280;
+
+    --sfu-color-background: #0f1115;
+    --sfu-color-surface: #161920;
+    --sfu-color-surface-hover: #1c2029;
+
+    --sfu-color-border: #262b36;
+    --sfu-color-border-strong: #343a47;
+
+    --sfu-color-success: #4ade80;
+    --sfu-color-success-soft: rgba(74, 222, 128, 0.12);
+    --sfu-color-warning: #fbbf24;
+    --sfu-color-warning-soft: rgba(251, 191, 36, 0.12);
+    --sfu-color-error: #f87171;
+    --sfu-color-error-soft: rgba(248, 113, 113, 0.12);
+
+    --sfu-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --sfu-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+    --sfu-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+  }
+}

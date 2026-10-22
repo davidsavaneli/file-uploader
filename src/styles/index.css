@@ -1,0 +1,3 @@
+/* sava-file-uploader — the one stylesheet consumers import (`sava-file-uploader/styles.css`). */
+@import './tokens.css';
+@import './file-uploader.css';

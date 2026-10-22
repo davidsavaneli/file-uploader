@@ -1,0 +1,6 @@
+# build output & deps
+dist
+node_modules
+
+# lockfile (huge, machine-managed)
+package-lock.json

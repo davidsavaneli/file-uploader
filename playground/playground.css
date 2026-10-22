@@ -1,0 +1,100 @@
+/* Playground-only chrome (never shipped). Uses the library tokens so it flips with the theme. */
+
+html,
+body {
+  margin: 0;
+  background: var(--sfu-color-background);
+  color: var(--sfu-color-text);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  transition: background var(--sfu-duration) var(--sfu-ease);
+}
+
+.pg {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.pg-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.pg-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.pg-subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--sfu-color-text-muted);
+}
+
+.pg-toggle {
+  appearance: none;
+  border: 1px solid var(--sfu-color-border);
+  background: var(--sfu-color-surface);
+  color: var(--sfu-color-text);
+  border-radius: var(--sfu-radius-full);
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background var(--sfu-duration-fast) var(--sfu-ease),
+    border-color var(--sfu-duration-fast) var(--sfu-ease);
+}
+
+.pg-toggle:hover {
+  background: var(--sfu-color-surface-hover);
+  border-color: var(--sfu-color-border-strong);
+}
+
+.pg-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--sfu-color-accent-ring);
+}
+
+.pg-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pg-section-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sfu-color-text-muted);
+}
+
+.pg-placeholder {
+  padding: 32px;
+  text-align: center;
+  border: 1px dashed var(--sfu-color-border-strong);
+  border-radius: var(--sfu-radius-lg);
+  background: var(--sfu-color-surface);
+  color: var(--sfu-color-text-muted);
+}
+
+.pg-placeholder code {
+  color: var(--sfu-color-accent);
+  font-size: 13px;
+}

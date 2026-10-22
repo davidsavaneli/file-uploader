@@ -1,0 +1,76 @@
+/*
+  Root + shared utilities. Class names are stable and prefixed (`.sfu`, `.sfu-dropzone`, `.sfu-item`, …) —
+  they are part of the public API, so a consumer can target them from their own CSS. Colors, radii,
+  spacing and motion come only from the `--sfu-*` tokens in tokens.css.
+*/
+
+.sfu,
+.sfu *,
+.sfu *::before,
+.sfu *::after {
+  box-sizing: border-box;
+}
+
+.sfu {
+  position: relative;
+  width: 100%;
+  font-family: var(--sfu-font-family);
+  font-size: var(--sfu-font-size-md);
+  line-height: var(--sfu-line-height);
+  color: var(--sfu-color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* visually hidden but still focusable / clickable — never `display: none`, which Safari ignores for `.click()` */
+.sfu-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.sfu-helper {
+  margin: var(--sfu-space-2) 0 0;
+  font-size: var(--sfu-font-size-sm);
+  color: var(--sfu-color-text-muted);
+}
+
+.sfu-helper--error {
+  color: var(--sfu-color-error);
+}
+
+@keyframes sfu-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sfu-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}

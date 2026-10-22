@@ -1,0 +1,75 @@
+/* .sfu-notice — the inline rejection notice under the dropzone (inside the `.sfu-live` status region). */
+
+.sfu-live:empty {
+  display: none;
+}
+
+.sfu-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sfu-space-2);
+  margin-top: var(--sfu-space-2);
+  padding: var(--sfu-space-2) var(--sfu-space-2) var(--sfu-space-2) var(--sfu-space-3);
+  border-radius: var(--sfu-radius-md);
+  font-size: var(--sfu-font-size-sm);
+  animation: sfu-fade-in var(--sfu-duration) var(--sfu-ease);
+}
+
+.sfu-notice--error {
+  background: var(--sfu-color-error-soft);
+  color: var(--sfu-color-error);
+}
+
+.sfu-notice__icon {
+  flex: none;
+  margin-top: 1px;
+}
+
+.sfu-notice__list {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-wrap: anywhere;
+}
+
+.sfu-notice__dismiss {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin: -2px -2px -2px 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--sfu-radius-sm);
+  background: none;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+  transition:
+    opacity var(--sfu-duration-fast) var(--sfu-ease),
+    background var(--sfu-duration-fast) var(--sfu-ease);
+}
+
+.sfu-notice__dismiss:hover {
+  opacity: 1;
+  background: var(--sfu-color-error-soft);
+}
+
+.sfu-notice__dismiss:focus-visible {
+  outline: none;
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--sfu-color-error);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sfu-notice {
+    animation: none;
+  }
+}

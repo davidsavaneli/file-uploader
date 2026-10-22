@@ -23,9 +23,12 @@ deliberately differs from.
 ## Layout
 
 - `src/index.ts` — public entry; imports `styles/index.css` (that import is what emits `dist/styles.css`).
-- `src/FileUploader/` — the component; one folder per sub-piece as it grows (`Dropzone/`, `FileItem/`, …),
-  each with its own `*.test.tsx`.
-- `src/styles/` — `tokens.css` (design tokens), one CSS file per component piece, all `@import`ed from `index.css`.
+- `src/FileUploader/` — the component. `FileUploader.tsx` owns the value + rejection notice and composes the
+  pieces; `Dropzone.tsx` + `useDropzone.ts` (picking / drag & drop, no library); `labels.ts` (every text,
+  overridable via the `labels` prop); `icons.tsx` (inline SVGs); `utils/` (`accept`, `bytes`, `validate`,
+  `cx` — pure, React-free, unit-tested in `utils.test.ts`). Behavior tests in `FileUploader.test.tsx`.
+- `src/styles/` — `tokens.css` (design tokens), `base.css` (root, `.sfu-sr-only`, helper, keyframes), one CSS
+  file per piece (`dropzone.css`, `notice.css`), all `@import`ed from `index.css`.
 - `playground/` — local demo (`npm run dev`), never published. Add a `<section className="pg-section">` per feature.
 - `scripts/post-build.mjs` — duplicates `.d.ts` → `.d.cts` for the CJS condition.
 

@@ -37,6 +37,7 @@
   --sfu-color-warning-soft: rgba(217, 119, 6, 0.1);
   --sfu-color-error: #dc2626;
   --sfu-color-error-soft: rgba(220, 38, 38, 0.08);
+  --sfu-color-error-contrast: #ffffff;
 
   /* shape */
   --sfu-radius-sm: 6px;
@@ -99,6 +100,7 @@
   --sfu-color-warning-soft: rgba(251, 191, 36, 0.12);
   --sfu-color-error: #f87171;
   --sfu-color-error-soft: rgba(248, 113, 113, 0.12);
+  --sfu-color-error-contrast: #1a0b0b;
 
   --sfu-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --sfu-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
@@ -130,6 +132,7 @@
     --sfu-color-warning-soft: rgba(251, 191, 36, 0.12);
     --sfu-color-error: #f87171;
     --sfu-color-error-soft: rgba(248, 113, 113, 0.12);
+    --sfu-color-error-contrast: #1a0b0b;
 
     --sfu-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
     --sfu-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);

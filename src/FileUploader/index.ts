@@ -1,2 +1,6 @@
 export { FileUploader } from './FileUploader'
-export type { FileUploaderProps } from './FileUploader'
+export type { FileUploaderProps, UploaderFile } from './FileUploader'
+export type { FileUploaderLabels } from './labels'
+export type { Accept } from './utils/accept'
+export type { FileRejection, FileRejectionCode } from './utils/validate'
+export { formatBytes, toBytes } from './utils/bytes'

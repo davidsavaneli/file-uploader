@@ -1,0 +1,244 @@
+/*
+  .sfu-dropzone — the drop target.
+  States: hover · :has(:focus-visible) · --active (files hovering) · --reject (they certainly can't be
+  added) · --disabled · --error. The dashed border lives on ::before so it can switch to solid and pull
+  inward on drag without the content shifting.
+*/
+
+.sfu-dropzone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sfu-space-4);
+  min-height: 188px;
+  padding: var(--sfu-space-6) var(--sfu-space-5);
+  border-radius: var(--sfu-radius-lg);
+  background: var(--sfu-color-surface);
+  color: var(--sfu-color-text);
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background var(--sfu-duration) var(--sfu-ease),
+    box-shadow var(--sfu-duration) var(--sfu-ease);
+}
+
+.sfu-dropzone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1.5px dashed var(--sfu-color-border-strong);
+  border-radius: inherit;
+  pointer-events: none;
+  transition:
+    border-color var(--sfu-duration) var(--sfu-ease),
+    inset var(--sfu-duration) var(--sfu-ease);
+}
+
+.sfu-dropzone:hover {
+  background: var(--sfu-color-surface-hover);
+}
+
+.sfu-dropzone:hover::before {
+  border-color: var(--sfu-color-accent-ring);
+}
+
+/* the browse button is the focus stop — the ring is drawn on the whole panel */
+.sfu-dropzone:has(:focus-visible) {
+  box-shadow: 0 0 0 3px var(--sfu-color-accent-ring);
+}
+
+.sfu-dropzone:has(:focus-visible)::before {
+  border-color: var(--sfu-color-accent);
+}
+
+/* icon */
+.sfu-dropzone__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--sfu-radius-full);
+  background: var(--sfu-color-accent-soft);
+  color: var(--sfu-color-accent);
+  transition:
+    transform var(--sfu-duration-slow) var(--sfu-ease-spring),
+    background var(--sfu-duration) var(--sfu-ease),
+    color var(--sfu-duration) var(--sfu-ease),
+    box-shadow var(--sfu-duration) var(--sfu-ease);
+}
+
+.sfu-dropzone__icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.sfu-dropzone:hover .sfu-dropzone__icon {
+  transform: translateY(-2px);
+}
+
+/* text */
+.sfu-dropzone__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sfu-space-1);
+}
+
+.sfu-dropzone__text {
+  margin: 0;
+  font-size: var(--sfu-font-size-md);
+  font-weight: 500;
+}
+
+.sfu-dropzone__connector {
+  color: var(--sfu-color-text-muted);
+  font-weight: 400;
+}
+
+.sfu-dropzone__browse {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--sfu-color-accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+  transition:
+    color var(--sfu-duration-fast) var(--sfu-ease),
+    text-decoration-color var(--sfu-duration-fast) var(--sfu-ease);
+}
+
+.sfu-dropzone__browse:hover {
+  color: var(--sfu-color-accent-hover);
+  text-decoration-color: currentColor;
+}
+
+.sfu-dropzone__browse:focus-visible {
+  outline: none;
+  text-decoration-color: currentColor;
+}
+
+.sfu-dropzone__hint {
+  margin: 0;
+  font-size: var(--sfu-font-size-sm);
+  color: var(--sfu-color-text-muted);
+}
+
+/* --active: files are hovering */
+.sfu-dropzone--active {
+  background: var(--sfu-color-accent-soft);
+}
+
+.sfu-dropzone--active::before {
+  inset: 4px;
+  border-style: solid;
+  border-color: var(--sfu-color-accent);
+}
+
+.sfu-dropzone--active .sfu-dropzone__icon {
+  transform: translateY(-6px) scale(1.08);
+  background: var(--sfu-color-accent);
+  color: var(--sfu-color-accent-contrast);
+  box-shadow: var(--sfu-shadow-md);
+}
+
+.sfu-dropzone--active .sfu-dropzone__title {
+  color: var(--sfu-color-accent);
+}
+
+/* --reject: the dragged items certainly can't be added */
+.sfu-dropzone--reject {
+  background: var(--sfu-color-error-soft);
+  cursor: no-drop;
+}
+
+.sfu-dropzone--reject::before {
+  inset: 4px;
+  border-style: solid;
+  border-color: var(--sfu-color-error);
+}
+
+.sfu-dropzone--reject .sfu-dropzone__icon {
+  background: var(--sfu-color-error);
+  color: var(--sfu-color-error-contrast);
+  animation: sfu-shake var(--sfu-duration-slow) var(--sfu-ease);
+}
+
+.sfu-dropzone--reject .sfu-dropzone__title {
+  color: var(--sfu-color-error);
+}
+
+/* while dragging, the headline is the only message — the browse affordance steps back */
+.sfu-dropzone--active .sfu-dropzone__connector,
+.sfu-dropzone--active .sfu-dropzone__browse,
+.sfu-dropzone--reject .sfu-dropzone__connector,
+.sfu-dropzone--reject .sfu-dropzone__browse {
+  opacity: 0;
+}
+
+.sfu-dropzone__connector,
+.sfu-dropzone__browse {
+  transition: opacity var(--sfu-duration-fast) var(--sfu-ease);
+}
+
+/* --error: the field is invalid (prop) */
+.sfu-dropzone--error::before,
+.sfu-dropzone--error:hover::before {
+  border-color: var(--sfu-color-error);
+}
+
+.sfu-dropzone--error .sfu-dropzone__icon {
+  background: var(--sfu-color-error-soft);
+  color: var(--sfu-color-error);
+}
+
+/* --disabled */
+.sfu-dropzone--disabled,
+.sfu-dropzone--disabled .sfu-dropzone__browse {
+  cursor: not-allowed;
+}
+
+.sfu-dropzone--disabled {
+  opacity: 0.55;
+}
+
+.sfu-dropzone--disabled:hover {
+  background: var(--sfu-color-surface);
+}
+
+.sfu-dropzone--disabled:hover::before {
+  border-color: var(--sfu-color-border-strong);
+}
+
+.sfu-dropzone--disabled:hover .sfu-dropzone__icon {
+  transform: none;
+}
+
+/* motion is a courtesy, never a requirement */
+@media (prefers-reduced-motion: reduce) {
+  .sfu-dropzone,
+  .sfu-dropzone::before,
+  .sfu-dropzone__icon,
+  .sfu-dropzone__browse,
+  .sfu-dropzone__connector {
+    transition: none;
+  }
+
+  .sfu-dropzone:hover .sfu-dropzone__icon,
+  .sfu-dropzone--active .sfu-dropzone__icon {
+    transform: none;
+  }
+
+  .sfu-dropzone--reject .sfu-dropzone__icon {
+    animation: none;
+  }
+}

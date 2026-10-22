@@ -98,3 +98,81 @@ body {
   color: var(--sfu-color-accent);
   font-size: 13px;
 }
+
+.pg-section-desc {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--sfu-color-text-muted);
+}
+
+.pg-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pg-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pg-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px 4px 10px;
+  border: 1px solid var(--sfu-color-border);
+  border-radius: var(--sfu-radius-full);
+  background: var(--sfu-color-surface);
+  font-size: 12px;
+}
+
+.pg-chip__size {
+  color: var(--sfu-color-text-muted);
+}
+
+.pg-chip__remove {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--sfu-color-surface-hover);
+  color: var(--sfu-color-text-muted);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pg-chip__remove:hover {
+  color: var(--sfu-color-error);
+  background: var(--sfu-color-error-soft);
+}
+
+.pg-rejected {
+  margin: 0;
+  font-size: 12px;
+  color: var(--sfu-color-text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* a consumer re-theming via tokens on a wrapper */
+.pg-theme-violet {
+  --sfu-color-accent: #7c3aed;
+  --sfu-color-accent-hover: #6d28d9;
+  --sfu-color-accent-soft: rgba(124, 58, 237, 0.1);
+  --sfu-color-accent-ring: rgba(124, 58, 237, 0.35);
+  --sfu-radius-lg: 4px;
+}
+
+[data-sfu-theme='dark'] .pg-theme-violet {
+  --sfu-color-accent: #a78bfa;
+  --sfu-color-accent-hover: #c4b5fd;
+  --sfu-color-accent-contrast: #1e1033;
+  --sfu-color-accent-soft: rgba(167, 139, 250, 0.14);
+  --sfu-color-accent-ring: rgba(167, 139, 250, 0.4);
+}

@@ -10,7 +10,8 @@
   `maxFiles`, `multiple`. Rejections surface in an inline notice and via `onDrop(accepted, rejected)`.
 - Value model `UploaderFile { id, file }` with controlled (`value` / `onChange`) and uncontrolled
   (`defaultValue`) modes.
-- `hint` (auto-generated from the constraints), `helperText`, `error`, `disabled`, `name`.
+- `label` (the dropzone's title) + `required`, `hint` (auto-generated from the constraints), `helperText`,
+  `error`, `disabled`, `name`.
 - `labels` — every rendered text is overridable.
 - Exports: `formatBytes`, `toBytes`, types `UploaderFile`, `FileRejection`, `FileRejectionCode`,
   `FileUploaderLabels`, `Accept`.

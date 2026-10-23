@@ -74,8 +74,8 @@ treated optimistically until the drop.
 
 ### Accessibility
 
-The browse control is a real `<button>` (Tab reaches it, Enter / Space open the picker); the whole panel
-is clickable. Rejections render in a polite `aria-live` region and the button is `aria-describedby` the
+The browse control ("Choose a file") is a real `<button>` (Tab reaches it, Enter / Space open the picker);
+the whole panel is clickable. Rejections render in a polite `aria-live` region and the button is `aria-describedby` the
 helper text and the notice. Motion respects `prefers-reduced-motion`.
 
 ## Theming
@@ -85,7 +85,7 @@ them globally or scoped to one uploader:
 
 ```css
 :root {
-  --sfu-color-accent: #7c3aed;
+  --sfu-color-accent: #7c3aed; /* default: #056472 */
   --sfu-radius-lg: 8px;
 }
 
@@ -97,8 +97,8 @@ them globally or scoped to one uploader:
 Class names are stable and prefixed (`.sfu`, `.sfu-dropzone`, `.sfu-item`, …) and are part of the
 public API, so you can also write your own rules against them.
 
-**Dark mode** — set `data-sfu-theme="dark"` on `<html>` (or any ancestor) to force it,
-`data-sfu-theme="light"` to opt out, or set nothing and the OS preference decides.
+**Dark mode** is opt-in — light is the default. Set `data-sfu-theme="dark"` on `<html>` (or any
+ancestor) to force it, or `data-sfu-theme="auto"` to follow the OS preference.
 
 The full token list lives in [`src/styles/tokens.css`](./src/styles/tokens.css).
 

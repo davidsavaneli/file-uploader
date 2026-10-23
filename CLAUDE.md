@@ -15,7 +15,7 @@ deliberately differs from.
   - every color / radius / spacing / motion value comes from a `--sfu-*` token in
     `src/styles/tokens.css` — no literal colors in component CSS (black/white scrims over images are
     the one justified exception);
-  - dark mode = `[data-sfu-theme='dark']` + `prefers-color-scheme` fallback, both defined in tokens.css.
+  - light is the default; dark = `[data-sfu-theme='dark']`, or `[data-sfu-theme='auto']` + `prefers-color-scheme`, both in tokens.css.
 - **Accessibility is not optional**: keyboard-operable dropzone and item actions, `aria-label`s on
   icon buttons, live region for status, focus-visible rings via `--sfu-color-accent-ring`,
   `prefers-reduced-motion` respected.

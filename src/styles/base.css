@@ -35,6 +35,11 @@
   white-space: nowrap;
 }
 
+.sfu-required {
+  margin-left: 2px;
+  color: var(--sfu-color-error);
+}
+
 .sfu-helper {
   margin: var(--sfu-space-2) 0 0;
   font-size: var(--sfu-font-size-sm);
@@ -56,21 +61,9 @@
   }
 }
 
-@keyframes sfu-shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  20% {
-    transform: translateX(-4px);
-  }
-  40% {
-    transform: translateX(4px);
-  }
-  60% {
-    transform: translateX(-3px);
-  }
-  80% {
-    transform: translateX(3px);
+/* the dropzone's marching edge — two dash periods (5 + 6) per cycle */
+@keyframes sfu-march {
+  to {
+    stroke-dashoffset: -22;
   }
 }

@@ -1,21 +1,26 @@
 /*
   .sfu-dropzone — the drop target.
-  States: hover · :has(:focus-visible) · --active (files hovering) · --reject (they certainly can't be
-  added) · --disabled · --error. The dashed border lives on ::before so it can switch to solid and pull
-  inward on drag without the content shifting.
+  A panel with a drawn dashed edge over a faint grid that fades toward the edges; a 44px "featured icon"
+  (an accent-tinted square with a soft halo) above the field label and the prompt ("Choose a file or drag
+  & drop it here").
+  States: hover (looks like --active) · :has(:focus-visible) · --active (files hovering) · --reject (they
+  certainly can't be added) · --disabled · --error.
 */
 
 .sfu-dropzone {
   position: relative;
+  isolation: isolate; /* keeps the grid backdrop (z-index -1) inside the dropzone */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--sfu-space-4);
-  min-height: 188px;
-  padding: var(--sfu-space-6) var(--sfu-space-5);
-  border-radius: var(--sfu-radius-lg);
-  background: var(--sfu-color-surface);
+  gap: var(--sfu-space-3);
+  min-height: 170px;
+  padding: var(--sfu-space-3) var(--sfu-space-4);
+  --sfu-edge-color: var(--sfu-color-border-strong); /* the dashed edge's stroke, per state below */
+  border: 1px solid transparent; /* keeps the box size; the visible edge is the SVG outline */
+  border-radius: var(--sfu-radius-md);
+  background: transparent;
   color: var(--sfu-color-text);
   text-align: center;
   cursor: pointer;
@@ -26,76 +31,120 @@
     box-shadow var(--sfu-duration) var(--sfu-ease);
 }
 
-.sfu-dropzone::before {
+/*
+  the grid backdrop — 40px cells, radial-masked so it fades out toward the edges. ::before is the resting
+  grid in the border color; ::after is the same grid in the accent, faded in while files hover
+  (gradients can't transition their colors, so the two layers crossfade instead).
+*/
+.sfu-dropzone::before,
+.sfu-dropzone::after {
   content: '';
   position: absolute;
   inset: 0;
-  border: 1.5px dashed var(--sfu-color-border-strong);
+  z-index: -1;
   border-radius: inherit;
+  background-image:
+    linear-gradient(to right, var(--sfu-grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--sfu-grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center;
+  -webkit-mask-image: radial-gradient(ellipse 60% 90% at 50% 50%, #000 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 60% 90% at 50% 50%, #000 20%, transparent 80%);
   pointer-events: none;
-  transition:
-    border-color var(--sfu-duration) var(--sfu-ease),
-    inset var(--sfu-duration) var(--sfu-ease);
 }
 
-.sfu-dropzone:hover {
-  background: var(--sfu-color-surface-hover);
+.sfu-dropzone::before {
+  --sfu-grid-color: var(--sfu-color-border);
 }
 
-.sfu-dropzone:hover::before {
-  border-color: var(--sfu-color-accent-ring);
+.sfu-dropzone::after {
+  --sfu-grid-color: var(--sfu-color-accent-soft);
+  opacity: 0;
+  transition: opacity var(--sfu-duration-slow) var(--sfu-ease);
+}
+
+/*
+  the dashed edge — an SVG rect instead of a CSS `dashed` border: round-capped dashes with even spacing,
+  a radius that matches the panel, and a stroke that can march. Still at rest; it only moves while files
+  hover. Its color comes from --sfu-edge-color and crossfades between states.
+*/
+.sfu-dropzone__outline {
+  position: absolute;
+  inset: -1px; /* over the 1px border box — the 1px stroke sits exactly where a border would */
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.sfu-dropzone__outline rect {
+  x: 0.5px;
+  y: 0.5px;
+  width: calc(100% - 1px);
+  height: calc(100% - 1px);
+  rx: calc(var(--sfu-radius-md) - 0.5px);
+  fill: none;
+  stroke: var(--sfu-edge-color);
+  stroke-width: 1px;
+  stroke-dasharray: 5 6;
+  stroke-linecap: round;
+  transition: stroke var(--sfu-duration) var(--sfu-ease);
 }
 
 /* the browse button is the focus stop — the ring is drawn on the whole panel */
 .sfu-dropzone:has(:focus-visible) {
+  --sfu-edge-color: var(--sfu-color-accent-border);
+  background: var(--sfu-color-accent-faint);
   box-shadow: 0 0 0 3px var(--sfu-color-accent-ring);
 }
 
-.sfu-dropzone:has(:focus-visible)::before {
-  border-color: var(--sfu-color-accent);
-}
-
-/* icon */
+/* featured icon — an accent-tinted square with a soft halo; it never moves (only its colors change) */
 .sfu-dropzone__icon {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: var(--sfu-radius-full);
-  background: var(--sfu-color-accent-soft);
+  --sfu-icon-tint: var(--sfu-color-accent-soft);
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: calc(var(--sfu-radius-md) * 0.9);
   color: var(--sfu-color-accent);
+  /* the tint is a layer over an opaque surface, so the grid behind never shows through the icon */
+  background: linear-gradient(var(--sfu-icon-tint), var(--sfu-icon-tint))
+    var(--sfu-color-background);
+  box-shadow: 0 0 0 5px var(--sfu-color-accent-faint);
   transition:
-    transform var(--sfu-duration-slow) var(--sfu-ease-spring),
-    background var(--sfu-duration) var(--sfu-ease),
     color var(--sfu-duration) var(--sfu-ease),
     box-shadow var(--sfu-duration) var(--sfu-ease);
 }
 
 .sfu-dropzone__icon svg {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
 }
 
-.sfu-dropzone:hover .sfu-dropzone__icon {
-  transform: translateY(-2px);
-}
-
-/* text */
+/* title + prompt + hint stacked under the icon */
 .sfu-dropzone__body {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--sfu-space-1);
+}
+
+.sfu-dropzone__title {
+  margin-bottom: var(--sfu-space-1);
+  font-size: var(--sfu-font-size-md);
+  font-weight: 500;
+  color: var(--sfu-color-text);
 }
 
 .sfu-dropzone__text {
   margin: 0;
   font-size: var(--sfu-font-size-md);
-  font-weight: 500;
 }
 
-.sfu-dropzone__connector {
+.sfu-dropzone__prompt {
   color: var(--sfu-color-text-muted);
-  font-weight: 400;
 }
 
 .sfu-dropzone__browse {
@@ -105,21 +154,15 @@
   border: 0;
   background: none;
   font: inherit;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--sfu-color-accent);
   cursor: pointer;
   text-decoration: underline;
   text-decoration-color: transparent;
   text-underline-offset: 3px;
-  text-decoration-thickness: 1.5px;
   transition:
     color var(--sfu-duration-fast) var(--sfu-ease),
     text-decoration-color var(--sfu-duration-fast) var(--sfu-ease);
-}
-
-.sfu-dropzone__browse:hover {
-  color: var(--sfu-color-accent-hover);
-  text-decoration-color: currentColor;
 }
 
 .sfu-dropzone__browse:focus-visible {
@@ -133,72 +176,68 @@
   color: var(--sfu-color-text-muted);
 }
 
-/* --active: files are hovering */
+/*
+  --active: files are hovering. The panel keeps its dashed edge and light surface — the edge takes a soft
+  accent and starts marching, the grid lights up faintly. The icon and the prompt stay exactly as they
+  are; the marching edge is the one moving thing.
+*/
 .sfu-dropzone--active {
-  background: var(--sfu-color-accent-soft);
+  --sfu-edge-color: var(--sfu-color-accent-border);
+  background: var(--sfu-color-accent-faint);
 }
 
-.sfu-dropzone--active::before {
-  inset: 4px;
-  border-style: solid;
-  border-color: var(--sfu-color-accent);
+.sfu-dropzone--active .sfu-dropzone__outline rect {
+  animation: sfu-march var(--sfu-duration-loop) linear infinite;
 }
 
-.sfu-dropzone--active .sfu-dropzone__icon {
-  transform: translateY(-6px) scale(1.08);
-  background: var(--sfu-color-accent);
-  color: var(--sfu-color-accent-contrast);
-  box-shadow: var(--sfu-shadow-md);
+.sfu-dropzone--active::after {
+  opacity: 1;
 }
 
-.sfu-dropzone--active .sfu-dropzone__title {
-  color: var(--sfu-color-accent);
+/*
+  hover looks exactly like a drag over the zone — the same rules as --active, behind `(hover: hover)` so a
+  tap on a touch screen doesn't leave the edge marching.
+*/
+@media (hover: hover) {
+  .sfu-dropzone:not(.sfu-dropzone--disabled):hover {
+    --sfu-edge-color: var(--sfu-color-accent-border);
+    background: var(--sfu-color-accent-faint);
+  }
+
+  .sfu-dropzone:not(.sfu-dropzone--disabled):hover .sfu-dropzone__outline rect {
+    animation: sfu-march var(--sfu-duration-loop) linear infinite;
+  }
+
+  .sfu-dropzone:not(.sfu-dropzone--disabled):hover::after {
+    opacity: 1;
+  }
 }
 
-/* --reject: the dragged items certainly can't be added */
+/*
+  --reject: the dragged items certainly can't be added. The edge takes a soft red and stays still, the
+  icon swaps to the crossed frame; the notice explains why after the drop.
+*/
 .sfu-dropzone--reject {
-  background: var(--sfu-color-error-soft);
+  --sfu-edge-color: var(--sfu-color-error-border);
   cursor: no-drop;
 }
 
-.sfu-dropzone--reject::before {
-  inset: 4px;
-  border-style: solid;
-  border-color: var(--sfu-color-error);
-}
-
 .sfu-dropzone--reject .sfu-dropzone__icon {
-  background: var(--sfu-color-error);
-  color: var(--sfu-color-error-contrast);
-  animation: sfu-shake var(--sfu-duration-slow) var(--sfu-ease);
-}
-
-.sfu-dropzone--reject .sfu-dropzone__title {
+  --sfu-icon-tint: var(--sfu-color-error-soft);
   color: var(--sfu-color-error);
+  box-shadow: 0 0 0 5px var(--sfu-color-error-soft);
 }
 
-/* while dragging, the headline is the only message — the browse affordance steps back */
-.sfu-dropzone--active .sfu-dropzone__connector,
-.sfu-dropzone--active .sfu-dropzone__browse,
-.sfu-dropzone--reject .sfu-dropzone__connector,
-.sfu-dropzone--reject .sfu-dropzone__browse {
-  opacity: 0;
-}
-
-.sfu-dropzone__connector,
-.sfu-dropzone__browse {
-  transition: opacity var(--sfu-duration-fast) var(--sfu-ease);
-}
-
-/* --error: the field is invalid (prop) */
-.sfu-dropzone--error::before,
-.sfu-dropzone--error:hover::before {
-  border-color: var(--sfu-color-error);
+/* --error: the field is invalid (prop) — red edge, red icon */
+.sfu-dropzone--error,
+.sfu-dropzone--error:hover {
+  --sfu-edge-color: var(--sfu-color-error);
 }
 
 .sfu-dropzone--error .sfu-dropzone__icon {
-  background: var(--sfu-color-error-soft);
+  --sfu-icon-tint: var(--sfu-color-error-soft);
   color: var(--sfu-color-error);
+  box-shadow: 0 0 0 5px var(--sfu-color-error-soft);
 }
 
 /* --disabled */
@@ -211,34 +250,21 @@
   opacity: 0.55;
 }
 
-.sfu-dropzone--disabled:hover {
-  background: var(--sfu-color-surface);
-}
-
-.sfu-dropzone--disabled:hover::before {
-  border-color: var(--sfu-color-border-strong);
-}
-
-.sfu-dropzone--disabled:hover .sfu-dropzone__icon {
-  transform: none;
-}
-
 /* motion is a courtesy, never a requirement */
 @media (prefers-reduced-motion: reduce) {
   .sfu-dropzone,
-  .sfu-dropzone::before,
+  .sfu-dropzone__outline rect,
   .sfu-dropzone__icon,
-  .sfu-dropzone__browse,
-  .sfu-dropzone__connector {
+  .sfu-dropzone__browse {
     transition: none;
   }
 
-  .sfu-dropzone:hover .sfu-dropzone__icon,
-  .sfu-dropzone--active .sfu-dropzone__icon {
-    transform: none;
+  .sfu-dropzone::after {
+    transition: none;
   }
 
-  .sfu-dropzone--reject .sfu-dropzone__icon {
+  .sfu-dropzone--active .sfu-dropzone__outline rect,
+  .sfu-dropzone:hover .sfu-dropzone__outline rect {
     animation: none;
   }
 }

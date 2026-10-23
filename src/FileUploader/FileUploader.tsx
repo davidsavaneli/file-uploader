@@ -43,6 +43,10 @@ export interface FileUploaderProps extends Omit<
   maxSize?: number | string
   /** Minimum size per file — bytes or a size string. Catches empty files. */
   minSize?: number | string
+  /** The field label — rendered as the dropzone's title. */
+  label?: ReactNode
+  /** Adds a red asterisk after the label (visual only — validate in your form). */
+  required?: boolean
   /** Dims and inerts the whole control. */
   disabled?: boolean
   /** Marks the field invalid — red dropzone border, `helperText` in the error color. */
@@ -90,6 +94,8 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(functi
     maxFiles,
     maxSize,
     minSize,
+    label,
+    required = false,
     disabled = false,
     error = false,
     helperText,
@@ -188,6 +194,8 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(functi
     >
       <Dropzone
         id={inputId}
+        label={label}
+        required={required}
         name={name}
         accept={acceptRules}
         multiple={multiple}

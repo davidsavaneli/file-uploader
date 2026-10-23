@@ -3,18 +3,14 @@
  * prop (a partial object — unspecified keys keep these English defaults).
  */
 export interface FileUploaderLabels {
-  /** Dropzone headline while idle, `multiple` mode. */
-  dropTitle: string
-  /** Dropzone headline while idle, single-file mode. */
-  dropTitleSingle: string
-  /** The word between the headline and the browse button — "Drag & drop files here **or** browse". */
-  browseConnector: string
-  /** The browse button text. */
+  /** The browse button text, single-file mode — "**Choose a file** or drag & drop it here". */
   browse: string
-  /** Headline while a file is dragged over the dropzone. */
-  dropActive: string
-  /** Headline while the dragged items can certainly not be added (wrong type, or no room left). */
-  dropReject: string
+  /** The browse button text, `multiple` mode. */
+  browseMultiple: string
+  /** The rest of the prompt after the browse button, single-file mode. */
+  dropText: string
+  /** The rest of the prompt after the browse button, `multiple` mode. */
+  dropTextMultiple: string
   /** Accessible name of the hidden file input. */
   inputLabel: string
   /** Accessible name of the notice's dismiss button. */
@@ -38,12 +34,10 @@ function listOr(items: string[]): string {
 }
 
 export const defaultLabels: FileUploaderLabels = {
-  dropTitle: 'Drag & drop files here',
-  dropTitleSingle: 'Drag & drop a file here',
-  browseConnector: 'or',
-  browse: 'browse',
-  dropActive: 'Drop to add',
-  dropReject: "These files can't be added",
+  browse: 'Choose a file',
+  browseMultiple: 'Choose files',
+  dropText: 'or drag & drop it here',
+  dropTextMultiple: 'or drag & drop them here',
   inputLabel: 'Choose files',
   dismiss: 'Dismiss',
   hintTypes: listOr,

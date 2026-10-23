@@ -29,17 +29,18 @@ describe('FileUploader — structure & a11y', () => {
 
   it('has a real browse button, a hidden labelled input and the default texts', () => {
     render(<FileUploader multiple name="attachments" />)
-    expect(screen.getByRole('button', { name: 'browse' })).toBeInTheDocument()
-    expect(screen.getByText('Drag & drop files here')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Choose files' })).toBeInTheDocument()
+    expect(screen.getByText('or drag & drop them here')).toBeInTheDocument()
     expect(input()).toHaveAttribute('name', 'attachments')
     expect(input()).toHaveAttribute('multiple')
     expect(input()).toHaveAttribute('aria-label', 'Choose files')
     expect(input()).toHaveClass('sfu-sr-only')
   })
 
-  it('single mode: singular headline, no multiple attribute', () => {
+  it('single mode: singular prompt, no multiple attribute', () => {
     render(<FileUploader />)
-    expect(screen.getByText('Drag & drop a file here')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Choose a file' })).toBeInTheDocument()
+    expect(screen.getByText('or drag & drop it here')).toBeInTheDocument()
     expect(input()).not.toHaveAttribute('multiple')
   })
 
@@ -57,20 +58,24 @@ describe('FileUploader — structure & a11y', () => {
   })
 
   it('labels override the texts', () => {
-    render(
-      <FileUploader
-        labels={{ dropTitleSingle: 'ჩააგდეთ ფაილი', browseConnector: 'ან', browse: 'აირჩიეთ' }}
-      />,
-    )
-    expect(screen.getByText('ჩააგდეთ ფაილი')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'აირჩიეთ' })).toBeInTheDocument()
+    render(<FileUploader labels={{ browse: 'აირჩიეთ ფაილი', dropText: 'ან ჩააგდეთ აქ' }} />)
+    expect(screen.getByRole('button', { name: 'აირჩიეთ ფაილი' })).toBeInTheDocument()
+    expect(screen.getByText('ან ჩააგდეთ აქ')).toBeInTheDocument()
+  })
+
+  it('label is the dropzone title, required adds the asterisk', () => {
+    const { rerender } = render(<FileUploader label="Attachment" />)
+    expect(screen.getByText('Attachment')).toHaveClass('sfu-dropzone__title')
+    expect(document.querySelector('.sfu-required')).toBeNull()
+    rerender(<FileUploader label="Attachment" required />)
+    expect(document.querySelector('.sfu-required')).toHaveTextContent('*')
   })
 
   it('helperText + error wire aria-describedby and the error classes', () => {
     render(<FileUploader error helperText="Required" />)
     const helper = screen.getByText('Required')
     expect(helper).toHaveClass('sfu-helper', 'sfu-helper--error')
-    expect(screen.getByRole('button', { name: 'browse' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Choose a file' })).toHaveAttribute(
       'aria-describedby',
       helper.id,
     )
@@ -82,7 +87,7 @@ describe('FileUploader — structure & a11y', () => {
     render(<FileUploader disabled onDrop={onDrop} />)
     expect(zone()).toHaveClass('sfu-dropzone--disabled')
     expect(zone()).toHaveAttribute('aria-disabled', 'true')
-    expect(screen.getByRole('button', { name: 'browse' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Choose a file' })).toBeDisabled()
     expect(input()).toBeDisabled()
     fireEvent.drop(zone(), dropData([png()]))
     expect(onDrop).not.toHaveBeenCalled()
@@ -94,9 +99,9 @@ describe('FileUploader — picking', () => {
     const user = userEvent.setup()
     render(<FileUploader />)
     const click = vi.spyOn(input(), 'click')
-    await user.click(screen.getByText('Drag & drop a file here'))
+    await user.click(screen.getByText('or drag & drop it here'))
     expect(click).toHaveBeenCalledTimes(1)
-    await user.click(screen.getByRole('button', { name: 'browse' }))
+    await user.click(screen.getByRole('button', { name: 'Choose a file' }))
     expect(click).toHaveBeenCalledTimes(2)
   })
 
@@ -105,7 +110,7 @@ describe('FileUploader — picking', () => {
     render(<FileUploader />)
     const click = vi.spyOn(input(), 'click')
     await user.tab()
-    expect(screen.getByRole('button', { name: 'browse' })).toHaveFocus()
+    expect(screen.getByRole('button', { name: 'Choose a file' })).toHaveFocus()
     await user.keyboard('{Enter}')
     expect(click).toHaveBeenCalledTimes(1)
   })
@@ -156,10 +161,12 @@ describe('FileUploader — drag & drop', () => {
     render(<FileUploader multiple />)
     fireEvent.dragEnter(zone(), dropData([png()]))
     expect(zone()).toHaveClass('sfu-dropzone--active')
-    expect(screen.getByText('Drop to add')).toBeInTheDocument()
+    // the prompt stays as it is while dragging
+    const prompt = screen.getByText('or drag & drop them here')
+    expect(screen.getByRole('button', { name: 'Choose files' })).toBeInTheDocument()
     // crossing a child fires another enter + leave — the depth counter must absorb it
-    fireEvent.dragEnter(screen.getByText('Drop to add'), dropData([png()]))
-    fireEvent.dragLeave(screen.getByText('Drop to add'), dropData([png()]))
+    fireEvent.dragEnter(prompt, dropData([png()]))
+    fireEvent.dragLeave(prompt, dropData([png()]))
     expect(zone()).toHaveClass('sfu-dropzone--active')
     fireEvent.dragLeave(zone(), dropData([png()]))
     expect(zone()).not.toHaveClass('sfu-dropzone--active')
@@ -169,7 +176,7 @@ describe('FileUploader — drag & drop', () => {
     const { rerender } = render(<FileUploader multiple accept="image/*" />)
     fireEvent.dragEnter(zone(), dropData([txt()]))
     expect(zone()).toHaveClass('sfu-dropzone--reject')
-    expect(screen.getByText("These files can't be added")).toBeInTheDocument()
+    expect(screen.getByText('or drag & drop them here')).toBeInTheDocument()
     fireEvent.dragLeave(zone(), dropData([txt()]))
 
     rerender(

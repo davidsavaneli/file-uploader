@@ -13,12 +13,24 @@ const base: SVGProps<SVGSVGElement> = {
   focusable: false,
 }
 
-export function UploadCloudIcon(props: SVGProps<SVGSVGElement>) {
+export function UploadIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...props}>
-      <path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.9 8.5 4 4 0 0 1 17.5 18" />
-      <path d="M12 12v9" />
-      <path d="m8.5 15.5 3.5-3.5 3.5 3.5" />
+      <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+      <path d="M12 14V7.5" />
+      <path d="m9.25 10.25 2.75-2.75 2.75 2.75" />
+      <path d="M9 16.75h6" />
+    </svg>
+  )
+}
+
+/** The upload icon's frame with a cross — shown while the dragged items can't be added. */
+export function UploadBlockedIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+      <path d="m9.5 9.5 5 5" />
+      <path d="m14.5 9.5-5 5" />
     </svg>
   )
 }

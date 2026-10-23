@@ -6,9 +6,7 @@ type Theme = 'light' | 'dark'
 
 /** Local demo shell: a centered column with a theme switch. Each part adds its demo sections here. */
 export function App() {
-  const [theme, setTheme] = useState<Theme>(() =>
-    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
-  )
+  const [theme, setTheme] = useState<Theme>('light')
 
   useEffect(() => {
     document.documentElement.dataset.sfuTheme = theme
@@ -31,18 +29,29 @@ export function App() {
         </button>
       </header>
 
+      <Demo title="Basic" description="A single file with a label — the reference look.">
+        <FileUploader label="Attachment" />
+      </Demo>
+
       <Demo title="Multiple" description="Any type, no limits. Drop several files at once.">
-        <FileUploader multiple />
+        <FileUploader label="Attachments" multiple />
       </Demo>
 
       <Demo
         title="Images up to 2 MB, max 3"
         description="The hint is generated from accept / maxSize / maxFiles. Drag a text file to see the reject state; drop an oversized image to see the notice."
       >
-        <FileUploader multiple accept="image/*" maxSize="2MB" maxFiles={3} />
+        <FileUploader label="Gallery" multiple accept="image/*" maxSize="2MB" maxFiles={3} />
       </Demo>
 
-      <Demo title="Single file" description="A new pick replaces the current one.">
+      <Demo
+        title="Required, no label"
+        description="`required` marks the title; without a label the prompt stands alone."
+      >
+        <FileUploader label="Passport scan" required accept=".pdf,.jpg,.png" />
+      </Demo>
+
+      <Demo title="No label" description="The prompt alone.">
         <FileUploader accept=".pdf,.docx" />
       </Demo>
 
@@ -51,6 +60,7 @@ export function App() {
         description="`hint` replaces the generated line; `helperText` sits under the control."
       >
         <FileUploader
+          label="Avatar"
           multiple
           accept="image/*"
           hint="Square images look best"
@@ -62,11 +72,11 @@ export function App() {
         title="Error state"
         description="`error` + `helperText` — a validation message from your form."
       >
-        <FileUploader multiple error helperText="Add at least one file" />
+        <FileUploader label="Attachments" multiple error helperText="Add at least one file" />
       </Demo>
 
       <Demo title="Disabled">
-        <FileUploader multiple disabled />
+        <FileUploader label="Attachments" multiple disabled />
       </Demo>
 
       <Demo title="Translated labels (ka-GE)" description="Every text comes from `labels`.">
@@ -74,12 +84,10 @@ export function App() {
           multiple
           accept="image/*"
           maxSize="5MB"
+          label="დანართები"
           labels={{
-            dropTitle: 'ჩააგდეთ ფაილები აქ',
-            browseConnector: 'ან',
-            browse: 'აირჩიეთ',
-            dropActive: 'გაუშვით დასამატებლად',
-            dropReject: 'ეს ფაილები ვერ დაემატება',
+            browseMultiple: 'აირჩიეთ ფაილები',
+            dropTextMultiple: 'ან ჩააგდეთ აქ',
             inputLabel: 'ფაილების არჩევა',
             dismiss: 'დახურვა',
             hintTypes: (types) => types.join(', '),
@@ -95,7 +103,7 @@ export function App() {
         description="Tokens overridden on a wrapper — no library code involved."
       >
         <div className="pg-theme-violet">
-          <FileUploader multiple accept="image/*" />
+          <FileUploader label="Gallery" multiple accept="image/*" />
         </div>
       </Demo>
     </main>

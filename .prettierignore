@@ -4,3 +4,6 @@ node_modules
 
 # lockfile (huge, machine-managed)
 package-lock.json
+
+# third-party skills installed with `npx skills` — not ours to reformat
+.claude/skills

@@ -1,12 +1,15 @@
 import type { ReactNode } from 'react'
 import { acceptAttribute } from './utils/accept'
 import { cx } from './utils/cx'
-import { UploadCloudIcon } from './icons'
+import { UploadBlockedIcon, UploadIcon } from './icons'
 import type { FileUploaderLabels } from './labels'
 import { useDropzone } from './useDropzone'
 
 export interface DropzoneProps {
   id: string
+  /** The field label, rendered as the dropzone's title. */
+  label?: ReactNode
+  required: boolean
   name?: string
   accept: string[]
   multiple: boolean
@@ -27,6 +30,8 @@ export interface DropzoneProps {
  */
 export function Dropzone({
   id,
+  label,
+  required,
   name,
   accept,
   multiple,
@@ -45,15 +50,6 @@ export function Dropzone({
     onFiles,
   })
 
-  const headline =
-    dragState === 'reject'
-      ? labels.dropReject
-      : dragState === 'active'
-        ? labels.dropActive
-        : multiple
-          ? labels.dropTitle
-          : labels.dropTitleSingle
-
   return (
     <div
       {...rootProps}
@@ -67,6 +63,11 @@ export function Dropzone({
       data-state={dragState ?? undefined}
       aria-disabled={disabled || undefined}
     >
+      {/* the dashed edge — an SVG stroke (round caps, even dashes) that marches while files hover */}
+      <svg className="sfu-dropzone__outline" aria-hidden="true" focusable="false">
+        <rect />
+      </svg>
+
       <input
         {...inputProps}
         id={id}
@@ -81,13 +82,22 @@ export function Dropzone({
       />
 
       <span className="sfu-dropzone__icon">
-        <UploadCloudIcon />
+        {dragState === 'reject' ? <UploadBlockedIcon /> : <UploadIcon />}
       </span>
 
       <div className="sfu-dropzone__body">
+        {label != null && (
+          <span className="sfu-dropzone__title">
+            {label}
+            {required && (
+              <span className="sfu-required" aria-hidden="true">
+                *
+              </span>
+            )}
+          </span>
+        )}
+        {/* the prompt stays put while dragging — the edge, grid and icon carry the drag state */}
         <p className="sfu-dropzone__text">
-          <span className="sfu-dropzone__title">{headline}</span>{' '}
-          <span className="sfu-dropzone__connector">{labels.browseConnector}</span>{' '}
           <button
             type="button"
             className="sfu-dropzone__browse"
@@ -95,8 +105,11 @@ export function Dropzone({
             disabled={disabled}
             aria-describedby={describedBy}
           >
-            {labels.browse}
-          </button>
+            {multiple ? labels.browseMultiple : labels.browse}
+          </button>{' '}
+          <span className="sfu-dropzone__prompt">
+            {multiple ? labels.dropTextMultiple : labels.dropText}
+          </span>
         </p>
         {hint != null && hint !== false && <p className="sfu-dropzone__hint">{hint}</p>}
       </div>

@@ -7,17 +7,19 @@
     :root { --sfu-color-accent: #7c3aed; }            // app-wide
     .checkout .sfu { --sfu-radius-lg: 4px; }          // scoped to one uploader
 
-  Dark mode: set `data-sfu-theme="dark"` on <html> (or any ancestor) to force it, `data-sfu-theme="light"`
-  to opt out, or set nothing and the OS preference (`prefers-color-scheme`) decides.
+  Light is the default. Dark mode is opt-in: set `data-sfu-theme="dark"` on <html> (or any ancestor) to
+  force it, or `data-sfu-theme="auto"` to follow the OS preference (`prefers-color-scheme`).
 */
 
 :root {
   /* color — base */
-  --sfu-color-accent: #2563eb;
-  --sfu-color-accent-hover: #1d4ed8;
+  --sfu-color-accent: #056472;
+  --sfu-color-accent-hover: #04515d;
   --sfu-color-accent-contrast: #ffffff;
-  --sfu-color-accent-soft: rgba(37, 99, 235, 0.08);
-  --sfu-color-accent-ring: rgba(37, 99, 235, 0.35);
+  --sfu-color-accent-faint: rgba(5, 100, 114, 0.05);
+  --sfu-color-accent-soft: rgba(5, 100, 114, 0.1);
+  --sfu-color-accent-ring: rgba(5, 100, 114, 0.35);
+  --sfu-color-accent-border: rgba(5, 100, 114, 0.45); /* soft accent edge — hover / drag-over */
 
   --sfu-color-text: #111827;
   --sfu-color-text-muted: #6b7280;
@@ -37,6 +39,7 @@
   --sfu-color-warning-soft: rgba(217, 119, 6, 0.1);
   --sfu-color-error: #dc2626;
   --sfu-color-error-soft: rgba(220, 38, 38, 0.08);
+  --sfu-color-error-border: rgba(220, 38, 38, 0.45);
   --sfu-color-error-contrast: #ffffff;
 
   /* shape */
@@ -59,7 +62,7 @@
   --sfu-font-size-xs: 11px;
   --sfu-font-size-sm: 12px;
   --sfu-font-size-md: 14px;
-  --sfu-font-size-lg: 16px;
+  --sfu-font-size-lg: 15px;
   --sfu-line-height: 1.5;
 
   /* elevation */
@@ -71,17 +74,20 @@
   --sfu-duration-fast: 120ms;
   --sfu-duration: 200ms;
   --sfu-duration-slow: 320ms;
+  --sfu-duration-loop: 1.4s; /* one cycle of the dropzone's marching edge (hover / drag-over) */
   --sfu-ease: cubic-bezier(0.2, 0, 0, 1);
   --sfu-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* dark values, shared by the forced and the OS-preferred dark theme */
 [data-sfu-theme='dark'] {
-  --sfu-color-accent: #60a5fa;
-  --sfu-color-accent-hover: #93c5fd;
-  --sfu-color-accent-contrast: #0b1220;
-  --sfu-color-accent-soft: rgba(96, 165, 250, 0.12);
-  --sfu-color-accent-ring: rgba(96, 165, 250, 0.4);
+  --sfu-color-accent: #16a6b4;
+  --sfu-color-accent-hover: #3dbcc8;
+  --sfu-color-accent-contrast: #04202b;
+  --sfu-color-accent-faint: rgba(22, 166, 180, 0.07);
+  --sfu-color-accent-soft: rgba(22, 166, 180, 0.14);
+  --sfu-color-accent-ring: rgba(22, 166, 180, 0.4);
+  --sfu-color-accent-border: rgba(22, 166, 180, 0.5);
 
   --sfu-color-text: #f3f4f6;
   --sfu-color-text-muted: #9ca3af;
@@ -100,6 +106,7 @@
   --sfu-color-warning-soft: rgba(251, 191, 36, 0.12);
   --sfu-color-error: #f87171;
   --sfu-color-error-soft: rgba(248, 113, 113, 0.12);
+  --sfu-color-error-border: rgba(248, 113, 113, 0.5);
   --sfu-color-error-contrast: #1a0b0b;
 
   --sfu-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -108,12 +115,14 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-sfu-theme='light']) {
-    --sfu-color-accent: #60a5fa;
-    --sfu-color-accent-hover: #93c5fd;
-    --sfu-color-accent-contrast: #0b1220;
-    --sfu-color-accent-soft: rgba(96, 165, 250, 0.12);
-    --sfu-color-accent-ring: rgba(96, 165, 250, 0.4);
+  [data-sfu-theme='auto'] {
+    --sfu-color-accent: #16a6b4;
+    --sfu-color-accent-hover: #3dbcc8;
+    --sfu-color-accent-contrast: #04202b;
+    --sfu-color-accent-faint: rgba(22, 166, 180, 0.07);
+    --sfu-color-accent-soft: rgba(22, 166, 180, 0.14);
+    --sfu-color-accent-ring: rgba(22, 166, 180, 0.4);
+    --sfu-color-accent-border: rgba(22, 166, 180, 0.5);
 
     --sfu-color-text: #f3f4f6;
     --sfu-color-text-muted: #9ca3af;
@@ -132,6 +141,7 @@
     --sfu-color-warning-soft: rgba(251, 191, 36, 0.12);
     --sfu-color-error: #f87171;
     --sfu-color-error-soft: rgba(248, 113, 113, 0.12);
+    --sfu-color-error-border: rgba(248, 113, 113, 0.5);
     --sfu-color-error-contrast: #1a0b0b;
 
     --sfu-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
